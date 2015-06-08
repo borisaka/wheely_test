@@ -1,0 +1,16 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+.provision
+.vagrant
+.travis.yml
+Vagrantfile
+.idea
+*DS_Store
+.Gemfile.lock
