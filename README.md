@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # WheelyTest
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/wheely_test`. To experiment with that code, run `bin/console` for an interactive prompt.
@@ -37,3 +38,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+=======
+# wheely_test
+My exam for wheely
+>>>>>>> f9e138cf3d520fc8ea869a760650b8a19561e9e7
