@@ -39,6 +39,10 @@ module WheelyTest
 
     end
 
+    def as_json(options={})
+      super(options).except!('_id')
+    end
+
     protected
     # destroying ETA if car going to far
     def update_eta_cache
