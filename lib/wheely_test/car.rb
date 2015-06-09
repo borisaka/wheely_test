@@ -15,7 +15,7 @@ module WheelyTest
 
     # Veri primitive. I am geonoob
     def self.geo_key(lat, long)
-      "#{lat.round(3)}_#{long.round(3)}"
+      "#{lat.round(2)}_#{long.round(2)}"
     end
 
     def geo_key
