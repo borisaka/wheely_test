@@ -60,6 +60,8 @@ GET /eta?long=33.3334&lat=32.3334
 ```shell
 curl -X "GET" "http://wheely.borisaka.net/eta?long=33.3334&lat=32.3334"
 ```
+Для удобства, кроме ETA возвращает флаг cached 
+
 
 Инфа о машине
 ```
