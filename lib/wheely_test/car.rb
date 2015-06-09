@@ -15,12 +15,18 @@ module WheelyTest
 
     # Veri primitive. I am geonoob
     def self.geo_key(lat, long)
-      "#{lat.round(2)}_#{long.round(2)}"
+      "#{lat.round(3)}_#{long.round(3)}"
+    end
+
+    def geo_key
+      self.class.geo_key(location[0], location[1])
     end
 
     def uncache
-      keys = WheelyTest.cache.keys("*#{num}*")
-      keys.each{|key| WheelyTest.cache.del(key) }
+      car_keys = WheelyTest.cache.keys("*#{num}*")
+      car_keys.each{|key| WheelyTest.cache.del(key) }
+      g_keys = WheelyTest.cache.keys("eta_#{geo_key}:*")
+      g_keys.each{|key| WheelyTest.cache.del(key) }
     end
 
     # Cashing eta by 3 cars: "#{rounded_lat}_#{rounded_long}:car1.car2.car3"
@@ -46,13 +52,16 @@ module WheelyTest
     protected
     # destroying ETA if car going to far
     def update_eta_cache
-      if changes['location'] || changes['available']
+      if changes['location']
         WheelyTest.logger.debug('Location changed')
         old_loc = changes['location'].first
-        if Math.hypot(old_loc[0]-location[0],old_loc[1]-location[1]) > 0.01 || changes['available']
+        if Math.hypot(old_loc[0]-location[0],old_loc[1]-location[1]) > 0.01
           WheelyTest.logger.debug('Clearing cache')
           uncache
         end
+      elsif changes['available']
+        WheelyTest.logger.debug('availability changed')
+        uncache
       end
     end
 

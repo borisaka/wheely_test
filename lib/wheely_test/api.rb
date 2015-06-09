@@ -26,30 +26,35 @@ get '/cars/:num' do
   end
 end
 
+# TODO to mach code.
 patch '/cars/:num' do
   body = JSON.parse(request.body.read)
-  if body.key?('location')
-    car = WheelyTest::Car.where(num: params['num']).first
-    if car
+  car = WheelyTest::Car.where(num: params['num']).first
+  if car
+    if body.key?('location')
       begin
         car.location = body['location']
-        WheelyTest.logger.debug(body)
-        if car.save
-          status 204
-        else
-          status 400
-          body ({errors:car.errors}.to_json)
-        end
       rescue Mongoid::Errors::InvalidValue => e
-        send_err.call
+        status 400
+        body({error: 'invalid location format'})
+      end
+    end
+    if body.key?('available')
+      car.available = body['available']
+    end
+    if car.changed?
+      if car.save
+        status 204
+      else
+        status 400
+        body ({error:car.errors}.to_json)
       end
     else
-      status 404
-      {error: 'car not found'}.to_json
+      status 204
     end
   else
-    status 400
-    {error: 'params must look like: {"location": [20.3245235, 43.2342342]}'}.to_json
+    status 404
+    {error: 'car not found'}.to_json
   end
 end
 

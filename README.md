@@ -1,44 +1,85 @@
-<<<<<<< HEAD
-# WheelyTest
+# Тестовое задание для wheely
+Сдесь выполнено тестовое задание для wheely
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/wheely_test`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-TODO: Delete this and the text above, and describe your gem
+## Особенность реализации:
+Есть модель car с аттрибутами num, available, location. num - ключевое поле (подразумевает номер машины)
+
+ETA расчитывается по формуле, похожей на данной в задании
+Кэшируется по ключу ``` "#{lat.round}_#{long.round}:car1.car2.car3"```
+
+Если одна из машин меняет местоположение больше, чем на константу - ключ из кэша удаляется.
+
+Если в "закэшированной" зоне появляется новая машина - ключ из кэша удаляется
+
+Константы взяты наобум, т.к. с геолокациями и геокодированием я дел никогда не имел.
+
+Тестирование проводил бегло, может быть масса багов. Код местами не оптимизирован. И вообще я кодил во сне=)
 
 ## Installation
 
-Add this line to your application's Gemfile:
 
-```ruby
-gem 'wheely_test'
+```shell
+bundle install
+cp config/mongoid.yml.example config/mongoid.yml
+cp config/redis.yml.example config/redis.yml
+rake mongoid:db:create_indexes
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install wheely_test
-
 ## Usage
+Реализовано 2 endpoint
+/cars
+/eta
 
-TODO: Write usage instructions here
+Чтобы добавить машину
+```
+POST /cars {"num":"car1","available":true,"location":[30.335,21.22]}
+```
 
-## Development
+```shell
+curl -X "POST" "http://wheely.borisaka.net/cars" \
+	-d "{\"num\":\"car1\",\"available\":true,\"location\":[30.335,21.22]}"
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
+Обновить координаты и/или статус доступности:
+```
+PATCH /cars/car1 {"location":[20,40],"available":false}
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```shell
+curl -X "PATCH" "http://wheely.borisaka.net/cars/car1" \
+	-d "{\"location\":[20,40],\"available\":false}"
+```
 
-## Contributing
+получить ETA
+```
+GET /eta?long=33.3334&lat=32.3334
+```
 
-1. Fork it ( https://github.com/[my-github-username]/wheely_test/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-=======
-# wheely_test
-My exam for wheely
->>>>>>> f9e138cf3d520fc8ea869a760650b8a19561e9e7
+```shell
+curl -X "GET" "http://wheely.borisaka.net/eta?long=33.3334&lat=32.3334"
+```
+
+Инфа о машине
+```
+GET /cars/car1
+```
+
+```shell
+curl -X "GET" "http://wheely.borisaka.net/cars/car1"
+```
+
+Список машин
+```
+GET /cars
+```
+
+```shell
+curl -X "GET" "http://wheely.borisaka.net/cars" \
+	-d "{\"num\":\"car4\",\"available\":true,\"location\":[30,21]}"
+```
+## Демо версия
+
+Работает на
+
+[http://wheely.borisaka.net](http://wheely.borisaka.net)  (мой тестовый сервачок на амазоне)

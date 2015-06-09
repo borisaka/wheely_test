@@ -1,14 +1,14 @@
-require "wheely_test/version"
+require 'wheely_test/version'
 require 'mongoid'
 require 'wheely_test/car'
 require 'redis'
-# require 'ac'
 
 module WheelyTest
   Mongoid.load!(File.join(File.dirname(__dir__), 'config', 'mongoid.yml'), :development)
 
   def self.cache
-    @cache ||= Redis.new
+    redis_conf = YAML.load_file(File.join(File.dirname(__dir__), 'config', 'redis.yml'))
+    @cache ||= Redis.new(redis_conf)
   end
 
   def self.logger
