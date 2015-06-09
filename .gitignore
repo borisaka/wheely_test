@@ -13,4 +13,11 @@
 Vagrantfile
 .idea
 *DS_Store
-.Gemfile.lock
+Gemfile.lock
+config/*.yml
+config/*.rb
+tmp/*
+log/*
+.versions.conf
+!tmp/.gitkeep
+!log/.gitkeep
